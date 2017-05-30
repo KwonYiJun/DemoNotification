@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnNotify1 = (Button)findViewById(R. id. btnNotify1);
+        btnNotify2 = (Button)findViewById(R. id. btnNotify2);
 
         btnNotify1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +40,42 @@ public class MainActivity extends AppCompatActivity {
                 builder.setContentText("Subject");
                 builder.setSmallIcon(R.mipmap.ic_launcher);
                 builder.setContentIntent(pIntent);
+                builder.setAutoCancel(true);
+
+                //adding sound to the notification
+                Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                builder.setSound(uri);
+                builder.setPriority(Notification.PRIORITY_HIGH);
+
+                Notification n = builder.build();
+                NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                //A good to have id, in case you want to cancel it programatically later on
+                notificationManager.notify(notificationID, n);
+                finish();
+            }
+        });
+
+
+        btnNotify2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+
+                PendingIntent pIntent = PendingIntent.getActivity(MainActivity.this, requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+                Notification.BigTextStyle bigText = new Notification.BigTextStyle();
+                bigText.bigText("This is one big text");
+                bigText.setBigContentTitle("Big Text - Long Content");
+                bigText.setSummaryText("Reflection Journal?");
+
+                //Build notification
+                Notification.Builder builder = new Notification.Builder(MainActivity.this);
+                builder.setContentTitle("Amazing Offer!");
+                builder.setContentText("Subject");
+                builder.setSmallIcon(R.mipmap.ic_launcher);
+                builder.setContentIntent(pIntent);
+                builder.setStyle(bigText);
                 builder.setAutoCancel(true);
 
                 //adding sound to the notification
